@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { STAKING_APY } from '../constants';
+import React, { useState, useMemo } from 'react';
+import { STAKING_APY, TOKEN_IMAGE_URL } from '../constants';
 
 interface StakingProps {
   walletBalance: number;
@@ -9,6 +9,60 @@ interface StakingProps {
   onUnstake: (amount: number) => void;
   onClaim: () => void;
 }
+
+const ApyChart: React.FC = () => {
+  const data = useMemo(() => {
+    const points = [];
+    let current = STAKING_APY;
+    for (let i = 0; i < 24; i++) {
+      // Simulate some fluctuation around the constant APY
+      const noise = (Math.random() - 0.5) * 5;
+      const trend = Math.sin(i / 4) * 2;
+      points.push(current + noise + trend);
+    }
+    // Ensure the last point aligns somewhat with current APY for continuity visual
+    points[points.length - 1] = STAKING_APY; 
+    return points;
+  }, []);
+
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const height = 50;
+  const width = 100;
+
+  const pathData = data.map((val, index) => {
+    const x = (index / (data.length - 1)) * 100; // percentage
+    const y = height - ((val - min) / range) * height;
+    return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
+  }).join(' ');
+
+  const areaPath = `${pathData} L 100 ${height} L 0 ${height} Z`;
+
+  return (
+    <div className="glass-panel rounded-2xl p-4 mb-6 relative overflow-hidden">
+        <div className="flex justify-between items-center mb-2">
+            <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">24h APY Trend</span>
+                <span className="bg-green-100 text-green-600 text-[10px] font-bold px-2 py-0.5 rounded-full">Live</span>
+            </div>
+            <span className="text-xs font-bold text-slate-400">Vol: Low</span>
+        </div>
+        <div className="h-[50px] w-full relative">
+            <svg viewBox={`0 0 100 ${height}`} className="w-full h-full overflow-visible" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.2" />
+                        <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+                    </linearGradient>
+                </defs>
+                <path d={areaPath} fill="url(#chartGradient)" stroke="none" />
+                <path d={pathData} fill="none" stroke="#8b5cf6" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+            </svg>
+        </div>
+    </div>
+  );
+};
 
 const Staking: React.FC<StakingProps> = ({ 
   walletBalance, 
@@ -70,13 +124,17 @@ const Staking: React.FC<StakingProps> = ({
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 animate-[fadeIn_0.3s_ease-out]">
+      
+      {/* APY Historical Chart */}
+      <ApyChart />
+
       {/* Confirmation Modal */}
       {confirmation?.isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-[fadeIn_0.2s_ease-out]">
             <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl transform scale-100 animate-[scaleIn_0.2s_ease-out] relative overflow-hidden">
                 <div className={`absolute top-0 left-0 w-full h-2 ${confirmation.type === 'stake' ? 'bg-gradient-to-r from-violet-500 to-fuchsia-600' : 'bg-gradient-to-r from-orange-400 to-red-500'}`}></div>
-                <div className={`w-20 h-20 rounded-full mx-auto flex items-center justify-center mb-6 shadow-lg ${confirmation.type === 'stake' ? 'bg-violet-50 text-violet-600' : 'bg-orange-50 text-orange-600'}`}>
-                    <i className={`fa-solid ${confirmation.type === 'stake' ? 'fa-lock' : 'fa-unlock'} text-3xl`}></i>
+                <div className={`w-20 h-20 rounded-full mx-auto flex items-center justify-center mb-6 shadow-lg overflow-hidden border-4 ${confirmation.type === 'stake' ? 'border-violet-100' : 'border-orange-100'}`}>
+                    <img src={TOKEN_IMAGE_URL} alt="Chonk Token" className="w-full h-full object-cover" />
                 </div>
                 {/* Specifically request "Are you sure?" title */}
                 <h3 className="text-2xl font-black text-slate-800 mb-2 text-center">Are you sure?</h3>
@@ -131,8 +189,8 @@ const Staking: React.FC<StakingProps> = ({
               <i className="fa-solid fa-vault text-8xl transform -rotate-12"></i>
            </div>
            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-violet-300 shadow-inner border border-white/10">
-                <i className="fa-solid fa-lock"></i>
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shadow-inner border border-white/10 overflow-hidden">
+                <img src={TOKEN_IMAGE_URL} alt="Token" className="w-full h-full object-cover" />
               </div>
               <span className="text-violet-200 font-bold uppercase text-xs tracking-wider">Total Staked</span>
            </div>

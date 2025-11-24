@@ -1,4 +1,5 @@
 
+
 export const INITIAL_PRICE = 0.0042069;
 export const PUMP_INCREMENT = 0.0000100;
 export const MAX_CHAT_HISTORY = 50;
@@ -15,6 +16,7 @@ export const GECKOTERMINAL_TOKEN_API_URL = `https://api.geckoterminal.com/api/v2
 
 export const STAKING_APY = 420.69;
 export const MOCK_WALLET_BALANCE = 1000000;
+export const TOKEN_IMAGE_URL = "https://placehold.co/400x400/8b5cf6/ffffff?text=CHONK";
 
 export const MOCK_TRANSACTIONS = [
   { user: 'Whale_0x4a', amount: '420.69 SOL', type: 'buy' },
