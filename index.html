@@ -5,19 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ChonkPump - To The Moon</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+      }
+    </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600;700&display=swap');
       body {
         font-family: 'Fredoka', sans-serif;
+        transition: background-color 0.5s ease, color 0.5s ease;
       }
       .chonk-gradient {
         background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 99%, #FECFEF 100%);
+        min-height: 100vh;
+      }
+      .dark .chonk-gradient {
+        background: linear-gradient(135deg, #0f172a 0%, #312e81 100%);
       }
       .glass-panel {
         background: rgba(255, 255, 255, 0.7);
         backdrop-filter: blur(10px);
         border: 2px solid rgba(255, 255, 255, 0.5);
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+      }
+      .dark .glass-panel {
+        background: rgba(15, 23, 42, 0.7);
+        border: 2px solid rgba(255, 255, 255, 0.1);
       }
       .animate-float {
         animation: float 6s ease-in-out infinite;
@@ -39,6 +54,29 @@
         mask-image: linear-gradient(to right, black 85%, transparent 100%);
         -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
       }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(156, 163, 175, 0.5); 
+        border-radius: 5px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(156, 163, 175, 0.8); 
+      }
+      .dark ::-webkit-scrollbar-thumb {
+        background-color: rgba(71, 85, 105, 0.5);
+      }
+      .dark ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(71, 85, 105, 0.8);
+      }
     </style>
   <script type="importmap">
 {
@@ -51,7 +89,7 @@
 }
 </script>
 </head>
-  <body class="chonk-gradient min-h-screen text-slate-800">
+  <body class="chonk-gradient min-h-screen text-slate-800 dark:text-slate-100 selection:bg-pink-500 selection:text-white">
     <div id="root"></div>
   </body>
 </html>

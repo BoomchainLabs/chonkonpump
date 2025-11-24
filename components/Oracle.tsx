@@ -25,8 +25,8 @@ const Oracle: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const responseText = await getOracleResponse(input);
-      setMessages(prev => [...prev, { role: 'model', text: responseText }]);
+      const { text, sources } = await getOracleResponse(input);
+      setMessages(prev => [...prev, { role: 'model', text, sources }]);
     } catch (error) {
       setMessages(prev => [...prev, { role: 'model', text: "The ether is cloudy...", isError: true }]);
     } finally {
@@ -35,32 +35,48 @@ const Oracle: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[400px] md:h-[500px] w-full max-w-2xl mx-auto glass-panel rounded-3xl overflow-hidden shadow-2xl">
+    <div className="flex flex-col h-[400px] md:h-[500px] w-full max-w-2xl mx-auto glass-panel rounded-3xl overflow-hidden shadow-2xl bg-white/50 dark:bg-slate-900/50 transition-colors duration-300">
       <div className="bg-gradient-to-r from-violet-600 to-fuchsia-600 p-4 text-white flex items-center gap-3">
         <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-violet-600 text-xl font-bold">
           <i className="fa-solid fa-crystal-ball"></i>
         </div>
         <div>
           <h2 className="font-bold text-lg">Chonk Oracle</h2>
-          <p className="text-xs opacity-80">Powered by Gemini 2.5 Flash</p>
+          <p className="text-xs opacity-80">Powered by Gemini 2.5 Flash + Search</p>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white/50" ref={scrollRef}>
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white/30 dark:bg-slate-900/30" ref={scrollRef}>
         {messages.map((msg, idx) => (
-          <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 py-3 ${
+          <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+            <div className={`max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 py-3 shadow-sm ${
               msg.role === 'user' 
                 ? 'bg-violet-600 text-white rounded-br-none' 
-                : 'bg-white border border-violet-100 text-slate-700 rounded-bl-none shadow-sm'
+                : 'bg-white dark:bg-slate-800 border border-violet-100 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-bl-none'
             }`}>
               {msg.text}
             </div>
+            {msg.sources && msg.sources.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-2 max-w-[85%] sm:max-w-[80%]">
+                {msg.sources.map((source, sIdx) => (
+                  <a 
+                    key={sIdx}
+                    href={source.uri}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[10px] bg-white/80 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-700 border border-violet-200 dark:border-slate-600 text-violet-600 dark:text-violet-400 px-2 py-1 rounded-full transition flex items-center gap-1 shadow-sm"
+                  >
+                    <i className="fa-brands fa-google"></i>
+                    <span className="truncate max-w-[150px]">{source.title}</span>
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-white border border-violet-100 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm flex gap-2 items-center">
+            <div className="bg-white dark:bg-slate-800 border border-violet-100 dark:border-slate-700 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm flex gap-2 items-center">
               <span className="w-2 h-2 bg-violet-400 rounded-full animate-bounce"></span>
               <span className="w-2 h-2 bg-violet-400 rounded-full animate-bounce delay-75"></span>
               <span className="w-2 h-2 bg-violet-400 rounded-full animate-bounce delay-150"></span>
@@ -69,7 +85,7 @@ const Oracle: React.FC = () => {
         )}
       </div>
 
-      <div className="p-3 sm:p-4 bg-white/80 border-t border-violet-100">
+      <div className="p-3 sm:p-4 bg-white/80 dark:bg-slate-800/80 border-t border-violet-100 dark:border-slate-700 backdrop-blur-md">
         <div className="flex gap-2">
           <input
             type="text"
@@ -77,7 +93,7 @@ const Oracle: React.FC = () => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Ask if it will pump..."
-            className="flex-1 px-4 py-3 rounded-xl border border-violet-200 focus:outline-none focus:ring-2 focus:ring-violet-500 bg-white text-sm sm:text-base"
+            className="flex-1 px-4 py-3 rounded-xl border border-violet-200 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500 bg-white dark:bg-slate-900 text-sm sm:text-base text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-colors"
           />
           <button
             onClick={handleSend}
