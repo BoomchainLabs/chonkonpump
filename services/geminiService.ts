@@ -38,7 +38,7 @@ export const getOracleResponse = async (userMessage: string): Promise<string> =>
 export const rateChonkImage = async (base64Image: string, mimeType: string): Promise<ChonkRating> => {
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-image', // Using flash for speed/vision
+      model: 'gemini-2.5-flash', // Using flash for multimodal vision + JSON
       contents: {
         parts: [
           {
