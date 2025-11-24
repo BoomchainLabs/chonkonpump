@@ -5,12 +5,16 @@ export const MAX_CHAT_HISTORY = 50;
 
 // Real Token Data
 export const POOL_ADDRESS = 'DWP3eKhMde4iWhWCQzEexzTxgrxtq1GURigNB9pfMsHf';
-export const TOKEN_MINT_ADDRESS = 'Chonk...REPLACE_WITH_REAL_MINT_ADDRESS...Pump'; // Update this with your actual Token Mint Address
+export const TOKEN_MINT_ADDRESS = 'DnUsQnwNot38V9JbisNC18VHZkae1eKK5N2Dgy55pump';
 export const SOLANA_EXPLORER_URL = `https://solscan.io/account/${TOKEN_MINT_ADDRESS}`;
 export const POOL_EXPLORER_URL = `https://solscan.io/account/${POOL_ADDRESS}`;
 export const BUY_LINK = `https://raydium.io/swap/?inputCurrency=sol&outputCurrency=${TOKEN_MINT_ADDRESS}&fixed=in`;
 export const SELL_LINK = `https://raydium.io/swap/?inputCurrency=${TOKEN_MINT_ADDRESS}&outputCurrency=sol&fixed=in`;
 export const GECKOTERMINAL_API_URL = `https://api.geckoterminal.com/api/v2/networks/solana/pools/${POOL_ADDRESS}`;
+export const GECKOTERMINAL_TOKEN_API_URL = `https://api.geckoterminal.com/api/v2/networks/solana/tokens/${TOKEN_MINT_ADDRESS}`;
+
+export const STAKING_APY = 420.69;
+export const MOCK_WALLET_BALANCE = 1000000;
 
 export const MOCK_TRANSACTIONS = [
   { user: 'Whale_0x4a', amount: '420.69 SOL', type: 'buy' },

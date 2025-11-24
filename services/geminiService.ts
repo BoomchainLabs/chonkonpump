@@ -1,8 +1,22 @@
-import { GoogleGenAI, Type, Schema } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
 import { SYSTEM_INSTRUCTION_ORACLE, SYSTEM_INSTRUCTION_RATER } from '../constants';
 import { ChonkRating } from '../types';
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
+export const getMarketSentiment = async (pumpCount: number): Promise<string> => {
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: `You are a hype-man for a meme coin called $CHONK9K. The user has pumped the coin ${pumpCount} times.
+      Provide a short, hilarious, and extremely bullish "vibe check" (1 sentence). Use crypto slang like WAGMI, moon, diamond hands, ape in, etc.`,
+    });
+    return response.text || "Vibes are astronomically high.";
+  } catch (error) {
+    console.error("Sentiment Error:", error);
+    return "Vibe check failed, but the chart looks green.";
+  }
+};
 
 export const getOracleResponse = async (userMessage: string): Promise<string> => {
   try {

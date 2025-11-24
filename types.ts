@@ -1,3 +1,4 @@
+
 export interface ChatMessage {
   role: 'user' | 'model';
   text: string;
@@ -18,5 +19,6 @@ export interface ChonkRating {
 export enum AppSection {
   DASHBOARD = 'DASHBOARD',
   ORACLE = 'ORACLE',
-  RATER = 'RATER'
+  RATER = 'RATER',
+  STAKING = 'STAKING'
 }

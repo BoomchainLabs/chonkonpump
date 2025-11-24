@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { POOL_ADDRESS } from '../constants';
 
@@ -8,7 +7,7 @@ interface PumpChartProps {
 
 const PumpChart: React.FC<PumpChartProps> = () => {
   return (
-    <div className="h-[500px] w-full bg-[#1e2025] rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-900/10 relative">
+    <div className="h-[350px] md:h-[500px] w-full bg-[#1e2025] rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-900/10 relative">
       <div className="absolute top-0 left-0 w-full bg-slate-900 text-white text-xs py-1 px-4 flex justify-between items-center z-10">
          <span className="font-bold flex items-center gap-2">
            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
